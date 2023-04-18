@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASH Game - Vue 3 options API</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="sidebar">
+        <!-- display mash categories -->
+        <ul>
+          <!-- should probably use link tags here -->
+          <!-- noooo I should have put the links in the centre of the grid... no need for sidebar then -->
+          <li v-for="(category, index) in categories" :key="category">
+            <span @click="chooseCategory(category.title)">{{ category.title }}</span>
+          </li>
+        </ul>
+
+
+        
+      </div>
+
+      <div class="main-content">
+        <h3 class="title">MASH</h3> 
+
+        <!-- I could have had the player do the  clicking (with the ui guiding them what to click)... 
+          and when they click, random fun stuff could happen like shaking or 'cracking' the screen etc -->
+
+  <p class="excuse">I began with the intention of making a perfect implementation of the Wikihow instructions... but... it didn't go to plan.<br>Only tested in Chrome.. put your sound on.</p>
+  
+
+        <div class="grid">
+
+          <div class="cell" v-for="(n,i) in totalCells" :key="totalCells">
+            <!-- check if n is odd or even number -->
+            <template v-if="n % 2 === 0"> <!-- check if cell is even -->
+              <h4 v-if="lifeChoices[(n / 2) - 1]" class="categoryTitle">{{ lifeChoices[(n / 2) - 1].title}}</h4>
+              <Transition name="fade">
+              <ul v-if="lifeChoices[(n / 2) - 1] && lifeChoices[(n / 2) - 1].lifeChoices">
+                <li v-for="(lifeChoice, index) in lifeChoices[(n / 2) - 1].lifeChoices" :key="lifeChoice">
+                  <span :class="{'selectedChoice' : lifeChoice.selected}">{{ lifeChoice.name }}</span>
+                </li>
+              </ul>
+            </Transition>
+            </template>
+            <template v-if="n === 5">
+            <p>Choose your life from the sidebar...</p>
+             <div v-if="lifeChoices.length === 4">
+              <div v-if="!message">
+                <p>Your Magic Number is {{magicNumber}}</p>
+                <button @click="playMash()" id="mashButton">SHOW MY FUTURE!!</button>
+              </div>
+              <div v-else class="messageBox"> <!-- have this displayed to a fanfare -->
+                <p>{{message}}</p>
+                <button @click="reset()" id="mashButton">Noooo! I Want a Better life!!</button>
+              </div>
+             </div>
+            </template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="main.js"></script>
+
+</body>
+
+</html>
